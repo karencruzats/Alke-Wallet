@@ -1,84 +1,107 @@
 <!DOCTYPE html>
-<html lang="es"><head>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet - Depositar</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <style>
-    
-     body { background-color: #c8ebf1; padding-top: 50px;font-family: 'Courier New', Courier, monospace; text-align: center; font-weight: bold;}
-     h2{font-weight: bolder;}
-      
+     body { 
+        background-color: #c8ebf1; 
+        padding-top: 50px;
+        font-family: 'Courier New', Courier, monospace; 
+        text-align: center; 
+        font-weight: bold;
+     }
+     h2 { font-weight: bolder; }
 </style>
 </head>
 <body>
 
 <div class="container mt-5" style="max-width: 500px;">
- <h2 class="titulo">Depositar Dinero</h2>
-    <div id="alertMensaje" class="alert" style="display: none;"></div>
+    <h2 class="titulo">Depositar Dinero</h2>
+
+    <div id="alert-container"></div>
+
     <div class="card p-4">
-    <form id="depositForm">
-    <div class="form-group">
-    <label for="inputDeposito" > ¿Quieres depositar?</label>
-    <br>
-    <input type="number" class="form-control" id="inputDeposito" placeholder="Ingresa el Monto" min="1" required="">
-    <br>
+     <form id="depositForm">
+         <div class="form-group">
+         <label for="inputDeposito">¿Quieres depositar?</label>
+         <br>
+         <input type="number" class="form-control" id="inputDeposito" placeholder="Ingresa el Monto" min="1" required>
+         <br>
+         </div>
+     <button type="submit" class="btn btn-success btn-lg btn-block mb-2">Realizar Depósito</button>
+     </form>
     </div>
-    <button type="submit" class="btn btn-success btn-lg btn-block mb-2">Realizar Depósito</button>
-    </form>
-    </div>
-    <a href="menu.html" class="btn btn-dark btn-lg btn-block mb-2">Volver al Menú Principal</a>
+     <a href="menu.html" class="btn btn-dark btn-lg btn-block mb-2">Volver al Menú Principal</a>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            var saldoActual = localStorage.getItem('walletSaldo');
-            if(saldoActual === null) {
-                saldoActual = 0;
-            } else {
-                saldoActual = parseInt(saldoActual); 
-            }
+<script>
+$(document).ready(function() {
+    var saldoActual = localStorage.getItem('walletSaldo');
+    if(saldoActual === null) {
+        saldoActual = 0;
+    } else {
+        saldoActual = parseInt(saldoActual); 
+    }
 
-            $('#depositForm').submit(function(evento) {
-                evento.preventDefault();
-                var montoIngresado = $('#inputDeposito').val();
-                var montoNumero = parseInt(montoIngresado);
+    $('#depositForm').submit(function(evento) {
+        evento.preventDefault();
+        var montoIngresado = $('#inputDeposito').val();
+        var montoNumero = parseInt(montoIngresado);
 
-            if(montoNumero > 0) {
-             var nuevoSaldo = saldoActual + montoNumero;
-             localStorage.setItem('walletSaldo', nuevoSaldo);
-              
-             var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
-        
-             var movimiento = {
-                 tipo: 'Depósito',
-                 descripcion: 'Recibido en mi cuenta',
-                 monto: montoNumero,
-                 fecha: new Date().toLocaleDateString(),
-                 esIngreso: true 
-                 };
+        if(montoNumero > 0) {
+            var nuevoSaldo = saldoActual + montoNumero;
+            localStorage.setItem('walletSaldo', nuevoSaldo);
+
+            var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
+            var movimiento = {
+                tipo: 'Depósito',
+                descripcion: 'Recibido en mi cuenta',
+                monto: montoNumero,
+                fecha: new Date().toLocaleDateString(),
+                esIngreso: true  
+            };
 
             historial.unshift(movimiento);
             localStorage.setItem('walletHistorial', JSON.stringify(historial));
 
-                 $('#alertMensaje').removeClass('alert-danger').addClass('alert-success');
-                 $('#alertMensaje').text('¡Depósito exitoso! Nuevo saldo: $' + nuevoSaldo);
-                 $('#alertMensaje').slideDown();
-                 $('#inputDeposito').val('');
-                    
+            var alerta = `
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    ¡Depósito exitoso! Nuevo saldo: $${Number(nuevoSaldo).toLocaleString("es-CL")}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `;
+            $('#alert-container').html(alerta);
+
+            $('#inputDeposito').val('');
             saldoActual = nuevoSaldo;
 
-            } else {
-                  $('#alertMensaje').removeClass('alert-success').addClass('alert-danger');
-                  $('#alertMensaje').text('El monto debe ser mayor a 0');
-                  $('#alertMensaje').slideDown();
-                }
-            });
-        });
+            setTimeout(function() {
+                window.location.href = "menu.html";
+            }, 2000);
+
+        } else {
+            var alertaError = `
+                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                    El monto debe ser mayor a 0
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `;
+            $('#alert-container').html(alertaError);
+        }
+    });
+});
 </script>
+
 </body>
 </html>

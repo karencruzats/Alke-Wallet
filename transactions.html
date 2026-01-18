@@ -34,47 +34,43 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <script>
+<script>
+
     $(document).ready(function() {
-        var saldo = localStorage.getItem('walletSaldo') || 0;
-    $('#saldoDisplay').text('$' + saldo);
+    var saldo = localStorage.getItem('walletSaldo') || 0;
+    saldo = parseInt(saldo);
 
-       var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
-            
-       var contenedor = $('#listaMovimientos');
+    $('#saldoDisplay').text('$' + saldo.toLocaleString("es-CL"));
 
-       if(historial.length === 0) {
-         contenedor.html('<div class="alert alert-warning text-center"> No se han registrado movimientos</div>');
-       } else {
- 
-       historial.forEach(function(mov) {
-                    
-       var claseColor = mov.esIngreso ? 'text-success' : 'text-danger';
-       var signo = mov.esIngreso ? '+' : '-';
+    var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
+    var contenedor = $('#listaMovimientos');
 
- var itemHTML = `
-  <ahref='#' class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">${mov.tipo}</h5>
-      <small class="${claseColor}" style="font-size: 1.1em; font-weight: bold;">
-    ${signo} $${mov.monto}
+    if(historial.length === 0) {
+        contenedor.html('<div class="alert alert-warning text-center"> No se han registrado movimientos</div>');
+    } else {
+        historial.forEach(function(mov) {
+            var claseColor = mov.esIngreso ? 'text-success' : 'text-danger';
+            var signo = mov.esIngreso ? '+' : '-';
 
-    </small>
-    </div>
-    <p class="mb-1">${mov.descripcion}</p>
-    <small class="text-muted">${mov.fecha}</small>
-  </a>
+            var montoFormateado = mov.monto.toLocaleString("es-CL");
 
-`;
-
-  contenedor.append(itemHTML);
-  
- });
- }
- });
+            var itemHTML = `
+            <a href='#' class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">${mov.tipo}</h5>
+                    <small class="${claseColor}" style="font-size: 1.1em; font-weight: bold;">
+                    ${signo} $${montoFormateado}
+                    </small>
+                </div>
+                <p class="mb-1">${mov.descripcion}</p>
+                <small class="text-muted">${mov.fecha}</small>
+            </a>
+            `;
+            contenedor.append(itemHTML);
+        });
+    }
+});
 </script>
 </body>
 </html>

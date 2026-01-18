@@ -42,7 +42,7 @@
      <li class="list-group-item d-flex justify-content-between align-items-center">
          <div class="contact-info">
                 <strong>Brad Pitt</strong><br>
-                <small class="text-muted">RUT: 8.444.444-k | Banco de Chile</small>
+                <small class="text-muted">RUT: 8.444.444-k | Banco Estado</small>
          </div>
      <button type="button" class="btn btn-sm btn-outline-info btn-lg " data-toggle="modal" data-target="#addEnviarDinero">
             Seleccionar </button>
@@ -50,7 +50,7 @@
      <li class="list-group-item d-flex justify-content-between align-items-center">
          <div class="contact-info">
                 <strong>Fred Durst</strong><br>
-                <small class="text-muted">RUT: 8.444.444-k | Banco de Chile</small>
+                <small class="text-muted">RUT: 10.876.899-k | Banco de Chile</small>
          </div>
         <button type="button" class="btn btn-sm btn-outline-info btn-lg " data-toggle="modal" data-target="#addEnviarDinero">
             Seleccionar
@@ -65,7 +65,7 @@
       <div class="modal-dialog" role="document">
          <div class="modal-content">
          <div class="modal-header">
-         <h5 class="titulo" id="modalLabel">Enviar Dinero a mis Contacto</h5>
+         <h5 class="titulo" id="modalLabel">Enviar Dinero a mis Contactos</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true"></span>
               </button>
@@ -85,8 +85,7 @@
     </form>
     </div>
     <a href="menu.html" class="btn btn-dark btn-lg">Volver al Menú Principal</a>
-</a>
-</div>
+    </div>
 
     </div></form></div></div></div></div>
 
@@ -143,7 +142,9 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-lg mb-1" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary btn-lg mb-1" id="saveContactBtn">Guardar Contacto</button>
+            <button type="button" class="btn btn-primary btn-lg mb-1" id="saveContactBtn">Guardar Contacto
+                
+            </button>
           </div>
         </div>
   
@@ -155,54 +156,113 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <script>
-             $(document).ready(function() {
-            var saldoActual = localStorage.getItem('walletSaldo');
-            if(saldoActual === null) {
-                saldoActual = 0;
-            } else {
-                saldoActual = parseInt(saldoActual); 
+<script>
+$(document).ready(function() {
+    var saldoActual = localStorage.getItem('walletSaldo');
+    if (saldoActual === null) {
+        saldoActual = 0;
+    } else {
+        saldoActual = parseInt(saldoActual);
+    }
+
+    // contactos desde localStorage
+    function cargarContactos() {
+        var contactos = JSON.parse(localStorage.getItem('walletContactos')) || [];
+
+        contactos.forEach(function(contacto) {
+            $('#contactList').append(
+              `<li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div class="contact-info">
+                    <strong>${contacto.nombre}</strong><br>
+                    <small class="text-muted">RUT: ${contacto.rut} | Banco ${contacto.banco}</small>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-info btn-lg" data-toggle="modal" data-target="#addEnviarDinero">Seleccionar</button>
+               </li>`
+            );
+        });
+    }
+
+    // Cargar contactos guardados al inicio
+    cargarContactos();
+
+    $('#saveContactBtn').click(function() {
+        if ($('#newContactName').val().trim() === "" || $('#newContactRUT').val().trim() === "") {
+            alert("Por favor completa los campos obligatorios");
+            return;
+        }
+
+        var nuevoContacto = {
+            nombre: $('#newContactName').val(),
+            rut: $('#newContactRUT').val(),
+            banco: $('#newContactBank').val()
+        };
+
+        var contactos = JSON.parse(localStorage.getItem('walletContactos')) || [];
+        contactos.push(nuevoContacto);
+        localStorage.setItem('walletContactos', JSON.stringify(contactos));
+
+      $('#contactList').append(
+        `<li class="list-group-item d-flex justify-content-between align-items-center">
+             <div class="contact-info">
+            <strong>${nuevoContacto.nombre}</strong><br>
+            <small class="text-muted">RUT: ${nuevoContacto.rut} | Banco ${nuevoContacto.banco}</small>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-info btn-lg" data-toggle="modal" data-target="#addEnviarDinero">Seleccionar</button>
+           </li>`
+        );
+
+        $('#addContactModal').modal('hide');
+        $('#addContactForm')[0].reset();
+    });
+    $('#depositForm').submit(function(evento) {
+        evento.preventDefault();
+        var montoIngresado = $('#inputDeposito').val();
+        var montoNumero = parseInt(montoIngresado);
+
+           if (montoNumero > 0) {
+            if (montoNumero > saldoActual) {
+
+         // Incorporando  alerta de saldo insuficiente
+                $('#alertMensaje').removeClass('alert-success').addClass('alert-danger');
+                $('#alertMensaje').text('Saldo insuficiente. No puedes enviar $' + montoNumero.toLocaleString("es-CL") + ' si tu saldo es $' + saldoActual.toLocaleString("es-CL"));
+                $('#alertMensaje').slideDown();
+                return; 
             }
 
-      $('#depositForm').submit(function(evento) {
-                evento.preventDefault();
-                var montoIngresado = $('#inputDeposito').val();
-                var montoNumero = parseInt(montoIngresado);
 
-                if(montoNumero > 0) {
-             
-                 var nuevoSaldo = saldoActual - montoNumero;
-                 localStorage.setItem('walletSaldo', nuevoSaldo);
-                    
-                 var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
-                    
-                 var movimiento = {
-                    tipo: 'Transferencia',
-                    descripcion: 'Envío de Dinero',
-                    monto: montoNumero,
-                    fecha: new Date().toLocaleDateString(),
-                    esIngreso: false 
-                    };
+            var nuevoSaldo = saldoActual - montoNumero;
+            localStorage.setItem('walletSaldo', nuevoSaldo);
 
-                    historial.unshift(movimiento);
-                    localStorage.setItem('walletHistorial', JSON.stringify(historial));
+            var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
 
-                    $('#alertMensaje').removeClass('alert-danger').addClass('alert-success');
-                    $('#alertMensaje').text('¡Envío de dinero exitoso! Nuevo saldo: $' + nuevoSaldo);
-                    $('#alertMensaje').slideDown();
-                    $('#inputDeposito').val('');
-                    
-                    saldoActual = nuevoSaldo;
+            var movimiento = {
+                tipo: 'Transferencia',
+                descripcion: 'Envío de Dinero',
+                monto: montoNumero,
+                fecha: new Date().toLocaleDateString(),
+                esIngreso: false
+            };
 
-                } else {
-                    $('#alertMensaje').removeClass('alert-success').addClass('alert-danger');
-                    $('#alertMensaje').text('El monto debe ser mayor a 0');
-                    $('#alertMensaje').slideDown();
-                }
-              
-            });
-        });
-            
+            historial.unshift(movimiento);
+            localStorage.setItem('walletHistorial', JSON.stringify(historial));
+
+            var nuevoSaldoFormateado = nuevoSaldo.toLocaleString("es-CL");
+
+            $('#alertMensaje').removeClass('alert-danger').addClass('alert-success');
+            $('#alertMensaje').text('¡Envío de dinero exitoso! Nuevo saldo: $' + nuevoSaldoFormateado);
+            $('#alertMensaje').slideDown();
+            $('#inputDeposito').val('');
+
+            saldoActual = nuevoSaldo;
+
+        } else {
+            $('#alertMensaje').removeClass('alert-success').addClass('alert-danger');
+            $('#alertMensaje').text('El monto debe ser mayor a 0');
+            $('#alertMensaje').slideDown();
+        }
+    });
+});
 </script>
+
 </body>
 </html>

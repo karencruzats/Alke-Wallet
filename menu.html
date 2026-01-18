@@ -48,8 +48,8 @@
             } else {
                 saldo = parseInt(saldo);
             }
-
-            $('#saldoDisplay').text('$' + saldo);
+var saldoFormateado= saldo.toLocaleString("es-CL");
+            $('#saldoDisplay').text('$' + saldoFormateado);
 
 
             $('#btnLogout').click(function(evento) {

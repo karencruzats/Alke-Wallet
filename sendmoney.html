@@ -154,54 +154,54 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <script>
-             $(document).ready(function() {
-            var saldoActual = localStorage.getItem('walletSaldo');
-            if(saldoActual === null) {
-                saldoActual = 0;
-            } else {
-                saldoActual = parseInt(saldoActual); 
-            }
+<script>
+$(document).ready(function() {
+    var saldoActual = localStorage.getItem('walletSaldo');
+    if(saldoActual === null) {
+        saldoActual = 0;
+    } else {
+        saldoActual = parseInt(saldoActual); 
+    }
 
-      $('#depositForm').submit(function(evento) {
-                evento.preventDefault();
-                var montoIngresado = $('#inputDeposito').val();
-                var montoNumero = parseInt(montoIngresado);
+    $('#depositForm').submit(function(evento) {
+        evento.preventDefault();
+        var montoIngresado = $('#inputDeposito').val();
+        var montoNumero = parseInt(montoIngresado);
 
-                if(montoNumero > 0) {
-             
-                 var nuevoSaldo = saldoActual - montoNumero;
-                 localStorage.setItem('walletSaldo', nuevoSaldo);
-                    
-                 var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
-                    
-                 var movimiento = {
-                    tipo: 'Transferencia',
-                    descripcion: 'Envío de Dinero',
-                    monto: montoNumero,
-                    fecha: new Date().toLocaleDateString(),
-                    esIngreso: false 
-                    };
-
-                    historial.unshift(movimiento);
-                    localStorage.setItem('walletHistorial', JSON.stringify(historial));
-
-                    $('#alertMensaje').removeClass('alert-danger').addClass('alert-success');
-                    $('#alertMensaje').text('¡Envío de dinero exitoso! Nuevo saldo: $' + nuevoSaldo);
-                    $('#alertMensaje').slideDown();
-                    $('#inputDeposito').val('');
-                    
-                    saldoActual = nuevoSaldo;
-
-                } else {
-                    $('#alertMensaje').removeClass('alert-success').addClass('alert-danger');
-                    $('#alertMensaje').text('El monto debe ser mayor a 0');
-                    $('#alertMensaje').slideDown();
-                }
-              
-            });
-        });
+        if(montoNumero > 0) {
+            var nuevoSaldo = saldoActual - montoNumero;
+            localStorage.setItem('walletSaldo', nuevoSaldo);
             
+            var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
+            
+            var movimiento = {
+                tipo: 'Transferencia',
+                descripcion: 'Envío de Dinero',
+                monto: montoNumero,
+                fecha: new Date().toLocaleDateString(),
+                esIngreso: false 
+            };
+
+            historial.unshift(movimiento);
+            localStorage.setItem('walletHistorial', JSON.stringify(historial));
+
+            var nuevoSaldoFormateado = nuevoSaldo.toLocaleString("es-CL");
+            var montoFormateado = montoNumero.toLocaleString("es-CL");
+
+            $('#alertMensaje').removeClass('alert-danger').addClass('alert-success');
+            $('#alertMensaje').text('¡Envío de dinero exitoso! Nuevo saldo: $' + nuevoSaldoFormateado);
+            $('#alertMensaje').slideDown();
+            $('#inputDeposito').val('');
+
+            saldoActual = nuevoSaldo;
+
+        } else {
+            $('#alertMensaje').removeClass('alert-success').addClass('alert-danger');
+            $('#alertMensaje').text('El monto debe ser mayor a 0');
+            $('#alertMensaje').slideDown();
+        }
+    });
+});
 </script>
 </body>
 </html>

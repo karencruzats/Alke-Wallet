@@ -40,7 +40,7 @@
     <script>
     $(document).ready(function() {
         var saldo = localStorage.getItem('walletSaldo') || 0;
-    $('#saldoDisplay').text('$' + saldo);
+    $('#saldoDisplay').text('$' + Number(saldo) .toLocaleString("es-CL"));
 
        var historial = JSON.parse(localStorage.getItem('walletHistorial')) || [];
             
@@ -50,25 +50,24 @@
          contenedor.html('<div class="alert alert-warning text-center"> No se han registrado movimientos</div>');
        } else {
  
-       historial.forEach(function(mov) {
-                    
-       var claseColor = mov.esIngreso ? 'text-success' : 'text-danger';
-       var signo = mov.esIngreso ? '+' : '-';
+  historial.forEach(function(mov) {
+  var claseColor = mov.esIngreso ? 'text-success' : 'text-danger';
+  var signo = mov.esIngreso ? '+' : '-';
 
- var itemHTML = `
-  <ahref='#' class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">${mov.tipo}</h5>
-      <small class="${claseColor}" style="font-size: 1.1em; font-weight: bold;">
-    ${signo} $${mov.monto}
+  var montoFormateado = Number(mov.monto).toLocaleString("es-CL");
+  var itemHTML = `
+       <a href='#' class="list-group-item list-group-item-action flex-column align-items-start">
+           <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">${mov.tipo}</h5>
+            <small class="${claseColor}" style="font-size: 1.1em; font-weight: bold;">
+             ${signo} $${montoFormateado}
+             </small>
+           </div>
+      <p class="mb-1">${mov.descripcion}</p>
+            <small class="text-muted">${mov.fecha}</small>
+            </a>
+            `;
 
-    </small>
-    </div>
-    <p class="mb-1">${mov.descripcion}</p>
-    <small class="text-muted">${mov.fecha}</small>
-  </a>
-
-`;
 
   contenedor.append(itemHTML);
   

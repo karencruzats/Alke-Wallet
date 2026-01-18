@@ -8,6 +8,7 @@
         body { background-color: #f8f9fa; padding-top: 50px; font-size: x-large;}
         .login-card { max-width: 400px; margin: 0 auto; padding: 20px; background: rgb(212, 238, 240); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Courier New', Courier, monospace; font-weight: bold;}
         h2{font-weight: bolder; font-size:10dvb; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif};
+       a{text-align: center;}
        </style>
 </head>
 <body>
@@ -29,7 +30,10 @@
 
     <button type="submit" class="btn btn-info btn-block">Iniciar sesión</button>
     </form>
-    </div>
+    
+<a href="index.html" class ="btn btn-outline-info btn-block"> Volver al Inicio</a>
+</a>
+</div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -46,12 +50,13 @@
              var email = $('#email').val();
              var pass = $('#password').val();
 
-             if(email === 'z@wallet.com' && pass === '777') {
+             if(email === 'z@wallet.com' && pass === '007') {
                  window.location.href = 'menu.html';
             
              } else {
                  alert('Datos incorrectos');
                  $('#password').val(''); 
+                  $('#email').val(''); 
                 }
             });
         });

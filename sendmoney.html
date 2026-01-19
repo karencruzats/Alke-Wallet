@@ -164,8 +164,7 @@ $(document).ready(function() {
     } else {
         saldoActual = parseInt(saldoActual);
     }
-
-    // contactos desde localStorage
+//cargar contactos desde local storage
     function cargarContactos() {
         var contactos = JSON.parse(localStorage.getItem('walletContactos')) || [];
 
@@ -181,8 +180,6 @@ $(document).ready(function() {
             );
         });
     }
-
-    // Cargar contactos guardados al inicio
     cargarContactos();
 
     $('#saveContactBtn').click(function() {
@@ -190,13 +187,11 @@ $(document).ready(function() {
             alert("Por favor completa los campos obligatorios");
             return;
         }
-
         var nuevoContacto = {
             nombre: $('#newContactName').val(),
             rut: $('#newContactRUT').val(),
             banco: $('#newContactBank').val()
         };
-
         var contactos = JSON.parse(localStorage.getItem('walletContactos')) || [];
         contactos.push(nuevoContacto);
         localStorage.setItem('walletContactos', JSON.stringify(contactos));
@@ -210,7 +205,6 @@ $(document).ready(function() {
             <button type="button" class="btn btn-sm btn-outline-info btn-lg" data-toggle="modal" data-target="#addEnviarDinero">Seleccionar</button>
            </li>`
         );
-
         $('#addContactModal').modal('hide');
         $('#addContactForm')[0].reset();
     });
@@ -221,15 +215,11 @@ $(document).ready(function() {
 
            if (montoNumero > 0) {
             if (montoNumero > saldoActual) {
-
-         // Incorporando  alerta de saldo insuficiente
                 $('#alertMensaje').removeClass('alert-success').addClass('alert-danger');
                 $('#alertMensaje').text('Saldo insuficiente. No puedes enviar $' + montoNumero.toLocaleString("es-CL") + ' si tu saldo es $' + saldoActual.toLocaleString("es-CL"));
                 $('#alertMensaje').slideDown();
                 return; 
             }
-
-
             var nuevoSaldo = saldoActual - montoNumero;
             localStorage.setItem('walletSaldo', nuevoSaldo);
 
@@ -242,7 +232,6 @@ $(document).ready(function() {
                 fecha: new Date().toLocaleDateString(),
                 esIngreso: false
             };
-
             historial.unshift(movimiento);
             localStorage.setItem('walletHistorial', JSON.stringify(historial));
 

@@ -6,13 +6,7 @@
     <title>Wallet - Depositar</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <style>
-     body { 
-        background-color: #c8ebf1; 
-        padding-top: 50px;
-        font-family: 'Courier New', Courier, monospace; 
-        text-align: center; 
-        font-weight: bold;
-     }
+     body { background-color: #c8ebf1; padding-top: 50px; font-family: 'Courier New', Courier, monospace;  text-align: center; font-weight: bold; }
      h2 { font-weight: bolder; }
 </style>
 </head>
@@ -28,11 +22,13 @@
          <div class="form-group">
          <label for="inputDeposito">¿Quieres depositar?</label>
          <br>
+         <p id="saldoActualTexto" class="text-dark"></p>
          <input type="number" class="form-control" id="inputDeposito" placeholder="Ingresa el Monto" min="1" required>
          <br>
          </div>
      <button type="submit" class="btn btn-success btn-lg btn-block mb-2">Realizar Depósito</button>
      </form>
+     <p id="leyendaDeposito" class="mt-3 text-success"> Depósito realizado con éxito</p>
     </div>
      <a href="menu.html" class="btn btn-dark btn-lg btn-block mb-2">Volver al Menú Principal</a>
     </div>
@@ -49,6 +45,7 @@ $(document).ready(function() {
     } else {
         saldoActual = parseInt(saldoActual); 
     }
+    $('#saldoActualTexto').text("Saldo actual: $" + Number(saldoActual).toLocaleString("es-CL"));
 
     $('#depositForm').submit(function(evento) {
         evento.preventDefault();
@@ -81,8 +78,12 @@ $(document).ready(function() {
             `;
             $('#alert-container').html(alerta);
 
+            $('#leyendaDeposito').text("Has depositado: $" + Number(montoNumero).toLocaleString("es-CL"));
+
             $('#inputDeposito').val('');
             saldoActual = nuevoSaldo;
+
+            $('#saldoActualTexto').text("Saldo actual: $" + Number(saldoActual).toLocaleString("es-CL"));
 
             setTimeout(function() {
                 window.location.href = "menu.html";

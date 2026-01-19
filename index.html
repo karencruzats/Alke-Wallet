@@ -8,29 +8,67 @@
 
 <style>
 body {font-family: 'Courier New', Courier, monospace; margin-top: 10cqmin; background-color: #c8ebf1; text-align: center;}
-.parrafo {font-size: 7cqmin ;font-family:'Courier New', Courier, monospace;}
-.titulo{font-weight: bolder ; font-size:20cqmin; font-family:  'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+.parrafo {padding-bottom: 4cqmin;   font-size: 8cqmin ;font-family:'Courier New', Courier, monospace;}
+.titulo{ padding: 7cqmin; font-weight: bolder ; font-size:20cqmin; font-family:  'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
 #miFormulario {font-family: 'Courier New', Courier, monospace; background-color:rgb(91, 95, 107)}
+.btn-custom { display: center; align-items: center;justify-content: center; gap: 8px; }
+.btn-custom img { width: 24px;height: 24px;}
+#miFormulario { text-align: center;background-color: rgba(83, 151, 156, 0.9);padding: 8px;border-radius: 8px;color: #0a0b3a; justify-content: center;}
 </style>
 </head>
 <body>
     <div class="inicioDePagina"id=inicio>
         <h1 class="titulo">Alke Wallet</h1>
         <p class="parrafo">Tu billetera digital</p>
-    </div>
+    </div>   
+<br>  
+<br>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <a class="navbar-brand" href="login.html">Mi Alke Wallet</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="https://www.google.com/">Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://www.google.com/"> Servicios</a>
+      </li>
+       <li class="nav-item active">
+        <a class="nav-link" href="https://www.google.com/"> Quienes Somos</a>
+      </li>
+<li class="nav-item">
+        <a class="nav-link" href="https://www.google.com/"></a>
+      </li>
+ </ul>
+  </div>
+</nav>
+    <button type="submit"id ="btnIngreso" class="btn btn-info btn-lg mb-4" > Ingresa a tu Cuenta </button>
+
+    <button id="miBoton" class="btn btn-success btn-lg mb-4 btn-custom">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+      Hablemos por WhatsApp
+    </button>
+
+    <a href="https://www.instagram.com/" class="btn btn-dark btn-lg mb-4 btn-custom btn">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram"> Síguenos en Instagram</a>
+      <br>
     <div>
-        <button type="submit"id ="btnIngreso" class="btn btn-info btn-lg btn-block mb-2" > Ingresa a tu Cuenta </button>
+    <form id="miFormulario">
+      <input type="text" id="Formulario" class="form-control mb-3" placeholder="Déjanos tu consulta">
+      <button type="submit" class="btn btn-info btn-lg btn-block">Enviar</button>
+    </form>
+
     </div>
-<br>
-     <form id="miFormulario">
-    <input type="text" id="Formulario" placeholder="Déjanos tu consulta">
-    <button type="submit" class="btn btn-info btn-lg btn-lg">Enviar</button>
-  </form>
-<br>
-
-<button id="miBoton" class="btn btn-info btn-lg mb-4">Visita nuestras Redes Sociales</button>
+  </div>
 
 
+
+  <br>
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -38,19 +76,20 @@ body {font-family: 'Courier New', Courier, monospace; margin-top: 10cqmin; backg
     <script>
 
 $("#miFormulario").submit(function(event) {
-                event.preventDefault();  
-                alert("Gracias por tu interés, Te contactaremos a la brevedad!🚀");
-            })
+      event.preventDefault();  
+      alert("Gracias por tu interés, te contactaremos a la brevedad 🚀");
+    });
 
- $( '#btnIngreso' ).click (function (evento) {
-                evento .preventDefault()
-                window.location.href="login.html" 
-            });
+    $('#btnIngreso').click(function(evento) {
+      evento.preventDefault();
+      window.location.href = "login.html";
+    });
 
- $("#miBoton").click(function() {
-                window.location.href = "https://www.instagram.com"; 
-            });
+    $("#miBoton").click(function() {
+      window.location.href = "https://web.whatsapp.com/";
+    });
   </script>
+
 
 
 </script>

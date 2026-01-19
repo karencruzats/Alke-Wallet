@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="es"><head>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet - Menú Principal</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <style>
   body { background-color: #c8ebf1; padding-top: 50px;font-family: 'Courier New', Courier, monospace; }
-.text-center {font-weight:bold;}
-  
+  .text-center {font-weight:bold;}
 </style>
 </head>
         
@@ -24,14 +24,16 @@
         </div>
 
         <div class="d-grid gap-2">
-            <a href="deposit.html" class="btn btn-success btn-lg btn-block mb-2">Depositar</a>
-            <a href="sendmoney.html" class="btn btn-info btn-lg btn-block mb-2">Enviar Dinero</a>
-            <a href="transactions.html" class="btn btn-secondary btn-lg btn-block mb-2">Últimos Movimientos</a>
+            <a href="deposit.html" id="btnDepositar" class="btn btn-success btn-lg btn-block mb-2">Depositar</a>
+            <a href="sendmoney.html" id="btnEnviar" class="btn btn-info btn-lg btn-block mb-2">Enviar Dinero</a>
+            <a href="transactions.html" id="btnMovimientos" class="btn btn-secondary btn-lg btn-block mb-2">Últimos Movimientos</a>
         </div>
         
         <div class="text-center mb-1">
             <a href="login.html" id="btnLogout" class="btn-block btn-dark btn-outline-dark">Cerrar Sesión</a>
         </div>
+
+        <div id="mensaje" class="alert alert-info text-center mb-4" style="display:none;"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -39,25 +41,46 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <script>
+    $(document).ready(function() {  
+        var saldo = localStorage.getItem('walletSaldo');
+        
+        if(saldo === null) {
+            saldo = 0;
+        } else {
+            saldo = parseInt(saldo);
+        }
+        var saldoFormateado= saldo.toLocaleString("es-CL");
+        $('#saldoDisplay').text('$' + saldoFormateado);
 
- $(document).ready(function() {  
-            var saldo = localStorage.getItem('walletSaldo');
-            
-            if(saldo === null) {
-                saldo = 0;
-            } else {
-                saldo = parseInt(saldo);
-            }
-var saldoFormateado= saldo.toLocaleString("es-CL");
-            $('#saldoDisplay').text('$' + saldoFormateado);
+        function mostrarMensajeYRedirigir(texto, url) {
+            $("#mensaje").text("Redirigiendo a " + texto).fadeIn();
+            setTimeout(function() {
+                window.location.href = url;
+            }, 2000); // 2 segundos de espera para redirigir a la pagina seleccionada
+        }
 
-
-            $('#btnLogout').click(function(evento) {
-                evento.preventDefault();
-                localStorage.clear(); 
-                window.location.href = "login.html";
-            });
+        // Eventos de los botones
+        $("#btnDepositar").click(function(e) {
+            e.preventDefault();
+            mostrarMensajeYRedirigir("Depositar", "deposit.html");
         });
-</script>
+
+        $("#btnEnviar").click(function(e) {
+            e.preventDefault();
+            mostrarMensajeYRedirigir("Enviar Dinero", "sendmoney.html");
+        });
+
+        $("#btnMovimientos").click(function(e) {
+            e.preventDefault();
+            mostrarMensajeYRedirigir("Últimos Movimientos", "transactions.html");
+        });
+
+        $("#btnLogout").click(function(evento) {
+            evento.preventDefault();
+            localStorage.clear(); 
+            window.location.href = "login.html";
+        });
+    });
+    </script>
 </body>
 </html>
